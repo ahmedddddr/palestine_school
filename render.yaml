@@ -4,9 +4,8 @@ services:
     env: node
     plan: free
     region: frankfurt
-    buildCommand: npm install
-    startCommand: node server.js
-    rootDir: backend
+    buildCommand: cd backend && npm install
+    startCommand: cd backend && node server.js
     autoDeploy: true
     pullRequestPreviewsEnabled: false
     healthCheckPath: /api/health
