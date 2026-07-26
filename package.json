@@ -1,0 +1,12 @@
+{
+  "name": "seeds-palestine-schools",
+  "version": "1.0.0",
+  "description": "Seeds Palestine Schools - Backend on Render, Frontend on Vercel",
+  "private": true,
+  "scripts": {
+    "postinstall": "cd backend && npm install"
+  },
+  "engines": {
+    "node": ">=18.17.0 <23.0.0"
+  }
+}
