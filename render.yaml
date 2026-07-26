@@ -1,6 +1,7 @@
 services:
   - type: web
     name: seeds-palestine-schools-backend
+    runtime: node
     env: node
     plan: free
     region: frankfurt
