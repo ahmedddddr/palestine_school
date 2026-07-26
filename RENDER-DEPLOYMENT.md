@@ -1,10 +1,14 @@
-# Render Backend Deployment Guide
+# Complete Deployment Guide
 
-## Manual Deployment (Recommended)
+## Overview
 
-Since Blueprint auto-detection was causing issues, use manual deployment:
+This project uses split deployment:
+- **Backend**: Node.js/Express API on Render
+- **Frontend**: Static HTML/CSS/JS on Vercel
 
-### Steps
+## Step 1: Deploy Backend to Render
+
+### Manual Deployment
 
 1. Go to https://dashboard.render.com
 2. Click "New" → "Web Service"
@@ -43,26 +47,81 @@ API_RATE_LIMIT_MAX=500
 
 5. Click "Create Web Service"
 
-### After Deployment
+### After Backend Deployment
 
 1. Note your Render backend URL (e.g., `https://seeds-palestine-schools-backend.onrender.com`)
-2. Update `FRONTEND_URL` in Render environment variables with your actual Vercel URL
-3. Add `API_BASE_URL` in Vercel with your Render backend URL
-4. Redeploy both services
+2. Test health endpoint: `https://your-backend.onrender.com/api/health`
 
-### Troubleshooting
+## Step 2: Deploy Frontend to Vercel
 
-**If backend fails to start:**
-- Check Render logs for errors
+### Manual Deployment
+
+1. Go to https://vercel.com/dashboard
+2. Click "Add New" → "Project"
+3. Import GitHub repository: `ahmedddddr/palestine_school`
+4. Configure:
+
+**Framework Preset:** Other
+**Root Directory:** `frontend`
+**Build Command:** (leave empty)
+**Output Directory:** `public`
+
+5. Click "Deploy"
+
+### After Frontend Deployment
+
+1. Note your Vercel URL (e.g., `https://seeds-palestine-schools-frontend.vercel.app`)
+
+## Step 3: Configure Environment Variables
+
+### On Vercel
+
+1. Go to your Vercel project → Settings → Environment Variables
+2. Add:
+   - Key: `API_BASE_URL`
+   - Value: `https://your-render-backend.onrender.com`
+3. Click "Save"
+4. Redeploy Vercel project
+
+### On Render
+
+1. Go to your Render service → Environment Variables
+2. Update:
+   - Key: `FRONTEND_URL`
+   - Value: `https://your-vercel-app.vercel.app` (your actual Vercel URL)
+3. Click "Save Changes"
+4. Redeploy Render service
+
+## Step 4: Test Deployment
+
+1. Visit your Vercel URL
+2. Try logging in with:
+   - Username: `superadmin`
+   - Password: (the password you set in Render)
+3. Verify the application works correctly
+
+## Troubleshooting
+
+**Backend redirect loop:**
+- Ensure `SERVE_STATIC=false` is set in Render environment variables
+- Redeploy backend after setting this variable
+
+**CORS errors:**
+- Backend now allows all origins for cross-origin requests
+- Verify `API_BASE_URL` is set correctly in Vercel
+- Verify `FRONTEND_URL` is set correctly in Render
+
+**MongoDB connection issues:**
 - Verify MongoDB connection string is correct
-- Ensure all environment variables are set
+- Check MongoDB Atlas network access allows 0.0.0.0/0
+- Test connection locally first
 
-**If CORS errors persist:**
-- The backend now allows all origins for cross-origin requests
-- Verify `FRONTEND_URL` is set correctly
-- Check that frontend is using correct `API_BASE_URL`
-
-**If login fails:**
+**Login failures:**
 - Verify backend is running and accessible
-- Check that MongoDB connection works
-- Test backend health endpoint: `https://your-backend.onrender.com/api/health`
+- Test backend health endpoint
+- Check Render logs for errors
+
+## Default Credentials
+
+- Super Admin: `superadmin` / (password set in Render)
+- Branch Admin: `branchadmin` / (password set in Render)
