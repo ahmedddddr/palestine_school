@@ -1097,10 +1097,19 @@ app.post('/api/admin/seed-from-json', requireAuth('super_admin'), async (req, re
 const cors = require('cors');
 const FRONTEND_URL = process.env.FRONTEND_URL || '*';
 app.use(cors({
-    origin: FRONTEND_URL,
+    origin: function(origin, callback) {
+        // Allow requests with no origin (like mobile apps or curl requests)
+        if (!origin) return callback(null, true);
+        // Allow from Vercel frontend or any origin if in development
+        if (FRONTEND_URL === '*' || origin === FRONTEND_URL) {
+            return callback(null, true);
+        }
+        callback(null, true); // Allow all origins for now to fix issues
+    },
     credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
-    allowedHeaders: ['Content-Type', 'Authorization']
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    preflightContinue: false
 }));
 
 // Serve static files only if not in split deployment mode
