@@ -363,13 +363,17 @@ function filteredByScope(data, scope) {
     return data.filter(item => String(item.branchId) === String(scope));
 }
 
-app.get('/login', (req, res) => {
-    if (req.session && req.session.authenticated) {
-        return res.redirect(req.session.role === 'teacher' ? '/teacher' : '/');
-    }
-    const publicDir = path.join(__dirname, '..', 'frontend', 'public');
-    res.sendFile(path.join(publicDir, 'html', 'login.html'));
-});
+// GET /login only serves HTML when static serving is enabled (local development)
+// In split deployment (SERVE_STATIC=false), frontend handles login page
+if (process.env.SERVE_STATIC !== 'false') {
+    app.get('/login', (req, res) => {
+        if (req.session && req.session.authenticated) {
+            return res.redirect(req.session.role === 'teacher' ? '/teacher' : '/');
+        }
+        const publicDir = path.join(__dirname, '..', 'frontend', 'public');
+        res.sendFile(path.join(publicDir, 'html', 'login.html'));
+    });
+}
 
 app.post('/login', loginLimiter, async (req, res) => {
     const username = sanitizeString(req.body.username || '', 50);
@@ -1113,11 +1117,13 @@ app.use(cors({
 }));
 
 // Serve static files only if not in split deployment mode
+// In split deployment (SERVE_STATIC=false), backend only serves API
 if (process.env.SERVE_STATIC !== 'false') {
     const publicDir = path.join(__dirname, '..', 'frontend', 'public');
-    app.use(express.static(publicDir));
-    app.use(express.static(__dirname));
-
+    
+    // API routes are defined before static serving to prevent interception
+    // Static file serving comes last as fallback
+    
     app.get('/', (req, res) => {
         if (!req.session || !req.session.authenticated) return res.redirect('/login');
         const role = req.session.role;
@@ -1137,6 +1143,10 @@ if (process.env.SERVE_STATIC !== 'false') {
     app.get('/teacher', requireAnyRole(['super_admin', 'branch_admin', 'teacher']), (req, res) => {
         res.sendFile(path.join(publicDir, 'html', 'teacher.html'));
     });
+
+    // Static file serving as fallback
+    app.use(express.static(publicDir));
+    app.use(express.static(__dirname));
 }
 
 app.use((err, req, res, next) => {
