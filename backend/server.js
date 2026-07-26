@@ -1154,13 +1154,21 @@ app.use((err, req, res, next) => {
     res.status(500).json({ error: 'Internal server error' });
 });
 
-app.use((req, res) => {
-    if (req.accepts('html')) {
-        if (!req.session || !req.session.authenticated) return res.redirect('/login');
-        return res.status(404).send('404 Not Found');
-    }
-    res.status(404).json({ error: 'Not found' });
-});
+// Catch-all route - only handle HTML redirects when static serving is enabled
+if (process.env.SERVE_STATIC !== 'false') {
+    app.use((req, res) => {
+        if (req.accepts('html')) {
+            if (!req.session || !req.session.authenticated) return res.redirect('/login');
+            return res.status(404).send('404 Not Found');
+        }
+        res.status(404).json({ error: 'Not found' });
+    });
+} else {
+    // In API-only mode, return JSON 404 for all unmatched routes
+    app.use((req, res) => {
+        res.status(404).json({ error: 'Not found' });
+    });
+}
 
 async function boot() {
     const connected = await connectToMongoDB();
