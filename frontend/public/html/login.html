@@ -316,7 +316,7 @@
                     const res = await fetch(`${apiBase}/login`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        credentials: 'same-origin',
+                        credentials: 'include',
                         body: JSON.stringify({ username, password })
                     });
                     let data = {};
