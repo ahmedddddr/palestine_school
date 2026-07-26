@@ -1,0 +1,29 @@
+[
+  {
+    "id": 1,
+    "name": "Cairo Main Branch",
+    "location": "Nasr City, Cairo",
+    "admin": "cairo_admin",
+    "branchCode": "cairo",
+    "status": "active",
+    "createdAt": "2026-07-26T09:39:15.771Z"
+  },
+  {
+    "id": 2,
+    "name": "Alexandria Branch",
+    "location": "Smouha, Alexandria",
+    "admin": "alex_admin",
+    "branchCode": "alexandria",
+    "status": "active",
+    "createdAt": "2026-07-26T09:39:15.772Z"
+  },
+  {
+    "id": 3,
+    "name": "Giza Branch",
+    "location": "Dokki, Giza",
+    "admin": "giza_admin",
+    "branchCode": "giza",
+    "status": "active",
+    "createdAt": "2026-07-26T09:39:15.772Z"
+  }
+]

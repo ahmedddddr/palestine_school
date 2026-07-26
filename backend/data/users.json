@@ -1,0 +1,24 @@
+[
+  {
+    "id": "super_admin_1",
+    "username": "superadmin",
+    "password": "$2b$12$5bC.ZFYMETGam0sC5UiGN.Gs.5D8yA6Onkddzit.gNZ385tb7MI0G",
+    "role": "super_admin",
+    "branchId": null,
+    "displayName": "System Super Admin",
+    "isActive": true,
+    "createdAt": "2026-07-26T09:39:16.528Z",
+    "lastLogin": null
+  },
+  {
+    "id": "branch_admin_1",
+    "username": "branchadmin",
+    "password": "$2b$12$ApU/mZ1VVcmVRzzw0sNyCuW608yAWolP7i0W9v0g5mkhYU4zybud6",
+    "role": "branch_admin",
+    "branchId": 1,
+    "displayName": "Cairo Branch Admin",
+    "isActive": true,
+    "createdAt": "2026-07-26T09:39:16.528Z",
+    "lastLogin": null
+  }
+]
