@@ -19,6 +19,7 @@ services:
       - key: TRUST_PROXY
         value: "true"
       - key: MONGODB_URI
+        value: mongodb+srv://wildacademy4_db_user:wild2345@cluster0.nnip6sq.mongodb.net/?appName=Cluster0
       - key: FORCE_FILE_STORAGE
         value: "false"
       - key: SERVE_STATIC
