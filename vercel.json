@@ -4,8 +4,7 @@
   "name": "seeds-palestine-schools-frontend",
   "framework": null,
   "buildCommand": "echo 'No build needed for static frontend'",
-  "outputDirectory": "public",
-  "rootDir": "frontend",
+  "outputDirectory": "frontend/public",
   "cleanUrls": true,
   "trailingSlash": false,
   "rewrites": [
